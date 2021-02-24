@@ -1,0 +1,9 @@
+-=-
+UNDEF=no daten
+NULL=no data
+0=window in intermediate position
+1=window completely opened
+2=window completely closed
+3=window airing position
+4=window intermediate airing position
+5=window currently running

@@ -1,0 +1,8 @@
+-=-
+UNDEF=no daten
+NULL=no data
+OFF=locked
+ON=unlocked
+0=unlocked
+1=open and locked
+2=closed and locked

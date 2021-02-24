@@ -1,0 +1,88 @@
+sitemap mb_connect label="MB-Connect"
+{
+    Frame label="Credentials"  {             
+        Default item=mbc_auth_code
+        Default item=mbc_auth_code_trigger
+        Default item=mbc_client_id
+        Default item=mbc_client_secret
+        Default item=mbc_vehicle_id
+        Default item=mbc_api_key
+    }				
+    Frame label="API Auth data"  {				
+        Default item=mbc_access_token   
+        Default item=mbc_auth_code_ts       
+        Default item=mbc_refresh_token         
+        Default item=mbc_token_expiry          
+        Default item=mbc_token_issued          
+        Default item=mbc_lastConnectionDateTime
+    }
+    Frame label="Scopes"  {
+        Default	item=mbc_scope_fuelstatus   
+        Default	item=mbc_scope_evstatus     
+        Default	item=mbc_scope_vehiclelock  
+        Default	item=mbc_scope_vehiclestatus
+        Default	item=mbc_scope_payasyoudrive
+    }
+    Frame label="Data - Vehicle Status" {
+        Default item=mbc_data_decklidstatus         
+        Default item=mbc_data_doorstatusfrontleft   
+        Default item=mbc_data_doorstatusfrontright  
+        Default item=mbc_data_doorstatusrearleft    
+        Default item=mbc_data_doorstatusrearright   
+        Default item=mbc_data_interiorLightsFront   
+        Default item=mbc_data_interiorLightsRear    
+        Default item=mbc_data_lightswitchposition   
+        Default item=mbc_data_readingLampFrontLeft  
+        Default item=mbc_data_readingLampFrontRight 
+        Default item=mbc_data_rooftopstatus         
+        Default item=mbc_data_sunroofstatus         
+        Default item=mbc_data_windowstatusfrontleft 
+        Default item=mbc_data_windowstatusfrontright
+        Default item=mbc_data_windowstatusrearleft  
+        Default item=mbc_data_windowstatusrearright 
+    }			
+    Frame label="Data - Fuel Status" {
+        Default item=mbc_data_rangeliquid       
+        Default item=mbc_data_tanklevelpercent  
+    }	
+    Frame label="Data - Vehicle Lock Status" {
+        Default item=mbc_data_doorlockstatusdecklid
+        Default item=mbc_data_doorlockstatusvehicle
+        Default item=mbc_data_doorlockstatusgas    
+        Default item=mbc_data_positionHeading      
+    }	
+    Frame label="Data - Electric Vehicle Status" {
+        Default item=mbc_data_soc          
+        Default item=mbc_data_rangeelectric   
+    }	
+    Frame label="Data - Pay As You Drive Insurance" {
+        Default item=mbc_data_odo     
+    }	
+    Frame label="Timestamps" {
+        Default item=mbc_data_rangeliquid_ts           
+        Default item=mbc_data_tanklevelpercen_ts       
+        Default item=mbc_data_decklidstatus_ts         
+        Default item=mbc_data_doorstatusfrontleft_ts   
+        Default item=mbc_data_doorstatusfrontright_ts  
+        Default item=mbc_data_doorstatusrearleft_ts    
+        Default item=mbc_data_doorstatusrearright_ts   
+        Default item=mbc_data_interiorLightsFront_ts   
+        Default item=mbc_data_interiorLightsRear_ts    
+        Default item=mbc_data_lightswitchposition_ts   
+        Default item=mbc_data_readingLampFrontLeft_ts  
+        Default item=mbc_data_readingLampFrontRight_ts 
+        Default item=mbc_data_rooftopstatus_ts         
+        Default item=mbc_data_sunroofstatus_ts         
+        Default item=mbc_data_windowstatusfrontleft_ts 
+        Default item=mbc_data_windowstatusfrontright_ts
+        Default item=mbc_data_windowstatusrearleft_ts  
+        Default item=mbc_data_windowstatusrearright_ts 
+        Default item=mbc_data_doorlockstatusdecklid_ts 
+        Default item=mbc_data_doorlockstatusvehicle_ts 
+        Default item=mbc_data_doorlockstatusgas_ts     
+        Default item=mbc_data_positionHeading_ts       
+        Default item=mbc_data_soc_ts                   
+        Default item=mbc_data_rangeelectric_ts         
+        Default item=mbc_data_odo_ts                   
+    }
+}

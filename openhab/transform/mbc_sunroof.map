@@ -1,0 +1,10 @@
+-=-
+UNDEF=no daten
+NULL=no data
+0=Tilt/slide sunroof is closed
+1=Tilt/slide sunroof is complete open
+2=Lifting roof is open
+3=Tilt/slide sunroof is running
+4=Tilt/slide sunroof in anti-booming position
+5=Sliding roof in intermediate position
+6=Lifting roof in intermediate position

@@ -1,0 +1,7 @@
+rule "Call mb-connect python script with --data arg"
+when
+    Time cron "0 */10 * ? * *" // every 10min
+then
+    logInfo("mb-connect", "Calling mb-connect.py --data")
+    executeCommandLine(Duration.ofSeconds(45),"/usr/bin/python3", "/etc/openhab/scripts/mb-connect/mb-connect.py", "--data")
+end
