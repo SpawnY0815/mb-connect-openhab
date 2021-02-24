@@ -6,7 +6,9 @@ The script can be called in different ways (openHAB exec binding, cronjob, by ha
 A timestamp (openHAB DateTime item) is also filled for each value, if a corresponding *_ts item was created.
 Take into account that the data is fetched from the Merceds-Benz server and not directly from your vehicle. This means that some values for example a door can be a few days old because it was not opened or closed in this time.
 
-openHAB Community Forum: https://community.openhab.org/t/mercedes-benz-integration/117795
+openHAB Community: https://community.openhab.org/t/mercedes-benz-integration/117795
+
+
 ### > ! Never show your credentials to others ! <
 
 ### Infos
