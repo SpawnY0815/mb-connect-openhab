@@ -6,9 +6,11 @@ The script can be called in different ways (openHAB exec binding, cronjob, by ha
 A timestamp (openHAB DateTime item) is also filled for each value, if a corresponding *_ts item was created.
 Take into account that the data is fetched from the Merceds-Benz server and not directly from your vehicle. This means that some values for example a door can be a few days old because it was not opened or closed in this time.
 
+openHAB Community: https://community.openhab.org/t/mercedes-benz-integration/117795
+
 ### > ! Never show your credentials to others ! <
 
-# Infos
+### Infos
 * Some values are currently not transmitted by Mercedes-Benz, although they are available. However, this seems to vary by vehicle model. The developers are already working on this. In my example, I currently do not see a "tank level percent" value.
 
 
