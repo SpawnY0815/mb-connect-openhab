@@ -1,0 +1,8 @@
+-=-
+UNDEF=no daten
+NULL=no data
+0=auto
+1=headlights
+2=sidelight left
+3=sidelight right
+4=parking light

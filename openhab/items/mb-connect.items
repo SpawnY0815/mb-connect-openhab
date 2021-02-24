@@ -1,0 +1,88 @@
+Group                   gMBC                                  "Mercedes-Benz API Items"
+
+// Strings for Primary Auth
+String                  mbc_auth_code                         "Auth Code [%s]"                                                          (gMBC)
+Switch                  mbc_auth_code_trigger                 "New Auth Code received"                                                  (gMBC)
+String                  mbc_auth_state                        "Auth State CSRF [%s]"                                                    (gMBC)
+String                  mbc_client_id                         "Client ID [%s]"                                                          (gMBC)
+String                  mbc_client_secret                     "Client Secret [%s]"                                                      (gMBC)
+String                  mbc_vehicle_id                        "VIN [%s]"                                                                (gMBC)
+String                  mbc_api_key                           "API Key [%s]"                                                            (gMBC)
+
+// Strings for Token Auth
+String                  mbc_access_token                      "AccessToken [%s]"                                                        (gMBC)
+String                  mbc_refresh_token                     "RefreshToken [%s]"                                                       (gMBC)
+String                  mbc_token_expiry                      "TokenExpiry [%s]"                                                        (gMBC)
+DateTime                mbc_token_issued                      "TokenIssued [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"                       (gMBC)
+
+DateTime                mbc_lastConnectionDateTime            "Last API connection [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"               (gMBC)
+
+// API scpoes
+Switch                  mbc_scope_fuelstatus                  "Fuel Status API"                                                         (gMBC)
+Switch                  mbc_scope_evstatus                    "Electric Vehicle Status API"                                             (gMBC)
+Switch                  mbc_scope_vehiclelock                 "Vehicle Lock Status API"                                                 (gMBC)
+Switch                  mbc_scope_vehiclestatus               "Vehicle Status API"                                                      (gMBC)
+Switch                  mbc_scope_payasyoudrive               "Pay As You Drive Insurance API"                                          (gMBC)
+
+// ######## DATA ##########
+// Fuel Status
+Number:Length           mbc_data_rangeliquid                  "Liquid fuel tank range [%s km]"                                          (gMBC)
+Number:Dimensionless    mbc_data_tanklevelpercent             "Liquid fuel tank level [%s %%]"                                          (gMBC)
+
+// Vehicle Status
+Contact                 mbc_data_decklidstatus                "Deck lid latch status opened/closed state [%s]"                          (gMBC)
+Contact                 mbc_data_doorstatusfrontleft          "Status of the front left door [%s]"                                      (gMBC)
+Contact                 mbc_data_doorstatusfrontright         "Status of the front right door [%s]"                                     (gMBC)
+Contact                 mbc_data_doorstatusrearleft           "Status of the rear left door [%s]"                                       (gMBC)
+Contact                 mbc_data_doorstatusrearright          "Status of the rear right door [%s]"                                      (gMBC)
+Switch                  mbc_data_interiorLightsFront          "Front light inside [%s]"                                                 (gMBC)
+Switch                  mbc_data_interiorLightsRear           "Rear light inside [%s]"                                                  (gMBC)
+Number                  mbc_data_lightswitchposition          "Rotary light switch position [MAP(mbc_lightswitch.map):%s]"              (gMBC)
+Switch                  mbc_data_readingLampFrontLeft         "Front left reading light inside [%s]"                                    (gMBC)
+Switch                  mbc_data_readingLampFrontRight        "Front right reading light inside [%s]"                                   (gMBC)
+Number                  mbc_data_rooftopstatus                "Status of the convertible top opened/closed [MAP(mbc_lock.map):%s]"      (gMBC)
+Number                  mbc_data_sunroofstatus                "Status of the sunroof [MAP(mbc_sunroof.map):%s]"                         (gMBC)
+Number                  mbc_data_windowstatusfrontleft        "Status of the front left window [MAP(mbc_windows.map):%s]"               (gMBC)
+Number                  mbc_data_windowstatusfrontright       "Status of the front right window [MAP(mbc_windows.map):%s]"              (gMBC)
+Number                  mbc_data_windowstatusrearleft         "Status of the rear left window [MAP(mbc_windows.map):%s]"                (gMBC)
+Number                  mbc_data_windowstatusrearright        "Status of the rear right window [MAP(mbc_windows.map):%s]"               (gMBC)
+
+// Vehicle Lock Status
+Switch                  mbc_data_doorlockstatusdecklid        "Lock status of the deck lid [MAP(mbc_lock.map):%s]"                      (gMBC)
+Number                  mbc_data_doorlockstatusvehicle        "Vehicle lock status [MAP(mbc_lock.map):%s]"                              (gMBC)
+Switch                  mbc_data_doorlockstatusgas            "Status of gas tank door lock [MAP(mbc_lock.map):%s]"                     (gMBC)
+Number:Angle            mbc_data_positionHeading              "Vehicle heading position [%.1f °]"                                       (gMBC)
+
+// Electric Vehicle Status
+Number:Dimensionless    mbc_data_soc                          "charge for the HV battery [%s %%]"                                       (gMBC)
+Number:Length           mbc_data_rangeelectric                "Electric range [%s km]"                                                  (gMBC)
+
+// Pay As You Drive Insurance
+Number:Length           mbc_data_odo                          "Odometer [%s km]"                                                        (gMBC)
+
+// Timestamps
+DateTime                mbc_data_rangeliquid_ts               "Liquid fuel tank range last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"    (gMBC)
+DateTime                mbc_data_tanklevelpercen_ts           "Liquid fuel tank level last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"    (gMBC)
+DateTime                mbc_data_decklidstatus_ts             "decklidstatus last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"             (gMBC)
+DateTime                mbc_data_doorstatusfrontleft_ts       "doorstatusfrontleft last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"       (gMBC)
+DateTime                mbc_data_doorstatusfrontright_ts      "doorstatusfrontright last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"      (gMBC)
+DateTime                mbc_data_doorstatusrearleft_ts        "doorstatusrearleft last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"        (gMBC)
+DateTime                mbc_data_doorstatusrearright_ts       "doorstatusrearright last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"       (gMBC)
+DateTime                mbc_data_interiorLightsFront_ts       "interiorLightsFront last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"       (gMBC)
+DateTime                mbc_data_interiorLightsRear_ts        "interiorLightsRear last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"        (gMBC)
+DateTime                mbc_data_lightswitchposition_ts       "lightswitchposition last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"       (gMBC)
+DateTime                mbc_data_readingLampFrontLeft_ts      "readingLampFrontLeft last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"      (gMBC)
+DateTime                mbc_data_readingLampFrontRight_ts     "readingLampFrontRight last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"     (gMBC)
+DateTime                mbc_data_rooftopstatus_ts             "rooftopstatus last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"             (gMBC)
+DateTime                mbc_data_sunroofstatus_ts             "sunroofstatus last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"             (gMBC)
+DateTime                mbc_data_windowstatusfrontleft_ts     "windowstatusfrontleft last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"     (gMBC)
+DateTime                mbc_data_windowstatusfrontright_ts    "windowstatusfrontright last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"    (gMBC)
+DateTime                mbc_data_windowstatusrearleft_ts      "windowstatusrearleft last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"      (gMBC)
+DateTime                mbc_data_windowstatusrearright_ts     "windowstatusrearright last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"     (gMBC)
+DateTime                mbc_data_doorlockstatusdecklid_ts     "doorlockstatusdecklid last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"     (gMBC)
+DateTime                mbc_data_doorlockstatusvehicle_ts     "doorlockstatusvehicle last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"     (gMBC)
+DateTime                mbc_data_doorlockstatusgas_ts         "doorlockstatusgas last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"         (gMBC)
+DateTime                mbc_data_positionHeading_ts           "positionHeading last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"           (gMBC)
+DateTime                mbc_data_soc_ts                       "soc last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"                       (gMBC)
+DateTime                mbc_data_rangeelectric_ts             "rangeelectric last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"             (gMBC)
+DateTime                mbc_data_odo_ts                       "odo last ts [%1$tY.%1$tm.%1$tY %1$tH:%1$tM:%1$tS]"                       (gMBC)
