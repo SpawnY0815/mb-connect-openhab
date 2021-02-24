@@ -8,6 +8,7 @@ Take into account that the data is fetched from the Merceds-Benz server and not 
 
 openHAB Community: https://community.openhab.org/t/mercedes-benz-integration/117795
 
+
 ### > ! Never show your credentials to others ! <
 
 ### Infos
@@ -21,7 +22,7 @@ openHAB Community: https://community.openhab.org/t/mercedes-benz-integration/117
 * pip installed
 * Mercedes-Benz ME User Account
 * Mercedes-Benz Devoloper App
-* Your Mercedes-Benz Vehicle ID (VIN) (german)
+* Your Mercedes-Benz Vehicle ID (VIN)
 * Know your openHAB root URL/IP and port. For example http://openhabian:8080 or http://192.168.1.50:8080/
 
 
