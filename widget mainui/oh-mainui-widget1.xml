@@ -1,0 +1,347 @@
+<!-- widget from muelli1967 -->
+uid: widget_Mercedes_v3
+tags: []
+props:
+  parameters:
+    - description: Label
+      label: Label
+      name: propLabel
+      required: false
+      type: TEXT
+  parameterGroups: []
+timestamp: May 18, 2021, 11:22:31 AM
+component: f7-card
+config:
+  expandable: true
+  swipeToClose: true
+  backdrop: true
+  class:
+    - card-expandable-animate-width
+  style:
+    height: 120px
+    max-height: 120px
+    min-height: 120px
+    min-width: 110px
+    max-width: 400px
+    margin: 5px
+    --f7-theme-color: var(--f7-text-color)
+    background-color: "=themeOptions.dark === 'light' ? 'white' : 'black'"
+slots:
+  default:
+    - component: f7-card-content
+      config:
+        style:
+          width: 100%
+      slots:
+        default:
+          - component: oh-button
+            config:
+              iconF7: xmark_circle_fill
+              iconSize: 30px
+              style:
+                position: absolute
+                top: 0
+                right: 0
+                padding-top: 10px
+                padding-bottom: 35px
+                z-index: 999
+              class:
+                - card-opened-fade-in
+                - cell-close-button
+                - card-close
+          - component: f7-block
+            config:
+              class:
+                - no-padding
+              style:
+                margin: -5px
+                height: 200px
+            slots:
+              default:
+                - component: f7-row
+                  config:
+                    style:
+                      height: 20px
+                      white-space: nowrap
+                      flex-wrap: nowrap
+                      text-overflow: ellipsis
+                  slots:
+                    default:
+                      - component: f7-col
+                        slots:
+                          default:
+                            - component: f7-row
+                              config:
+                                class:
+                                  - justify-content-flex-start
+                                style:
+                                  flex-wrap: nowrap
+                                  width: 100%
+                              slots:
+                                default:
+                                  - component: f7-icon
+                                    config:
+                                      material: directions_car
+                                      size: 20px
+                                      style:
+                                        margin-top: 0px
+                                  - component: Label
+                                    config:
+                                      text: My GLC 300e
+                                      style:
+                                        overflow: hidden
+                                        white-space: nowrap
+                                        text-overflow: ellipsis
+                                        font-size: 16px
+                                        font-weight: 600
+                                        margin-left: 2px
+                                        margin-top: -2px
+                            - component: f7-row
+                              config:
+                                class:
+                                  - justify-content-flex-start
+                                style:
+                                  flex-wrap: nowrap
+                                  width: 100%
+                              slots:
+                                default:
+                                  - component: f7-chip
+                                    config:
+                                      text: '="Bat: " + items.mbc_data_soc.displayState'
+                                      color: "=items.mbc_data_soc.state < '10' ? 'red' : 'green'"
+                                      style:
+                                        font-size: 11px
+                                        font-weight: 600
+                                  - component: f7-chip
+                                    config:
+                                      text: '="Fuel: " + items.mbc_data_tanklevelpercent.displayState'
+                                      color: "=items.mbc_data_tanklevelpercent.state < '20' ? 'red' : 'green'"
+                                      style:
+                                        font-size: 11px
+                                        font-weight: 600
+                            - component: f7-row
+                              config:
+                                style:
+                                  height: 20px
+                                  white-space: nowrap
+                                  flex-wrap: nowrap
+                                  text-overflow: ellipsis
+                              slots:
+                                default:
+                                  - component: f7-chip
+                                    config:
+                                      text: "=items.mbc_data_doorlockstatusvehicle.state =='2' ? 'locked' : 'unlocked'"
+                                      color: "=items.mbc_data_doorlockstatusvehicle.state =='2' ? 'green' : 'red'"
+                                      style:
+                                        font-size: 11px
+                                        font-weight: 600
+                            - component: f7-row
+                              config:
+                                class:
+                                  - justify-content-flex-start
+                                style:
+                                  white-space: nowrap
+                                  flex-wrap: nowrap
+                                  text-overflow: ellipsis
+                              slots:
+                                default:
+                                  - component: f7-icon
+                                    config:
+                                      material: ev_station
+                                      size: 16px
+                                      color: green
+                                      style:
+                                        margin-top: 20px
+                                  - component: Label
+                                    config:
+                                      text: =(Number.parseFloat(items.mbc_data_rangeelectric.state.split(" ")[0])).toFixed(0) + ' km'
+                                      style:
+                                        text-overflow: ellipsis
+                                        overflow: hidden
+                                        white-space: nowrap
+                                        margin-top: 20px
+                                        margin-left: 1px
+                                        font-size: 10px
+                                        font-weight: 500
+                                  - component: f7-icon
+                                    config:
+                                      material: local_gas_station
+                                      size: 15px
+                                      color: blue
+                                      style:
+                                        margin-top: 20px
+                                        margin-left: 2px
+                                  - component: Label
+                                    config:
+                                      text: =(Number.parseFloat(items.mbc_data_rangeliquid.state.split(" ")[0])).toFixed(0) + ' km'
+                                      style:
+                                        text-overflow: ellipsis
+                                        overflow: hidden
+                                        white-space: nowrap
+                                        margin-left: 1px
+                                        margin-top: 20px
+                                        font-size: 10px
+                                        font-weight: 500
+          - component: f7-block
+            config:
+              class:
+                - card-prevent-open
+                - card-content-padding
+              style:
+                height: 200px
+            slots:
+              default:
+                - component: oh-image
+                  config:
+                    url: http://XXX.XXX.XXX.XXX:8080/static/mb-connect/vehicle_images/EXT330.png
+                    style:
+                      width: 100%
+                      height: 100%
+                      object-fit: cover
+                - component: oh-list
+                  config:
+                    class:
+                      - padding
+                  slots:
+                    default:
+                      - component: Label
+                        config:
+                          text: =props.Title?props.Title:"other States:"
+                          style:
+                            padding: 7px
+                            border-bottom: 1px solid grey
+                            font-weight: 600
+                            color: gray
+                            margin-top: 10px
+                      - component: f7-list-item
+                        slots:
+                          header:
+                            - component: f7-row
+                              slots:
+                                default:
+                                  - component: f7-icon
+                                    config:
+                                      f7: lock
+                                      size: 32px
+                                      style:
+                                        padding: 5px
+                                  - component: Label
+                                    config:
+                                      text: Lock-Status
+                                      style:
+                                        margin-top: 10px
+                          footer:
+                            - component: f7-row
+                              slots:
+                                default:
+                                  - component: Label
+                                    config:
+                                      text: =items.mbc_data_doorlockstatusvehicle.displayState
+                                      style:
+                                        margin-top: 8px
+                                      color: gray
+                      - component: f7-list-item
+                        slots:
+                          header:
+                            - component: f7-row
+                              slots:
+                                default:
+                                  - component: f7-icon
+                                    config:
+                                      f7: lock_shield
+                                      size: 32px
+                                      style:
+                                        padding: 5px
+                                  - component: Label
+                                    config:
+                                      text: Latch
+                                      style:
+                                        margin-top: 10px
+                          footer:
+                            - component: f7-row
+                              slots:
+                                default:
+                                  - component: Label
+                                    config:
+                                      text: =items.mbc_data_decklidstatus.state
+                                      style:
+                                        margin-top: 8px
+                                      color: gray
+                      - component: f7-list-item
+                        slots:
+                          header:
+                            - component: f7-row
+                              slots:
+                                default:
+                                  - component: f7-icon
+                                    config:
+                                      f7: sun_max
+                                      size: 32px
+                                      style:
+                                        padding: 5px
+                                  - component: Label
+                                    config:
+                                      text: Sunroof
+                                      style:
+                                        margin-top: 10px
+                          footer:
+                            - component: f7-row
+                              slots:
+                                default:
+                                  - component: Label
+                                    config:
+                                      text: =items.mbc_data_sunroofstatus.displayState
+                                      style:
+                                        margin-top: 8px
+                      - component: f7-list-item
+                        slots:
+                          header:
+                            - component: f7-row
+                              slots:
+                                default:
+                                  - component: f7-icon
+                                    config:
+                                      f7: sum
+                                      size: 32px
+                                      style:
+                                        padding: 5px
+                                  - component: Label
+                                    config:
+                                      text: Total-km
+                                      style:
+                                        margin-top: 10px
+                          footer:
+                            - component: f7-row
+                              slots:
+                                default:
+                                  - component: Label
+                                    config:
+                                      text: =items.mbc_data_odo.displayState
+                                      style:
+                                        margin-top: 8px
+                      - component: f7-list-item
+                        slots:
+                          header:
+                            - component: f7-row
+                              slots:
+                                default:
+                                  - component: f7-icon
+                                    config:
+                                      f7: clock
+                                      size: 32px
+                                      style:
+                                        padding: 5px
+                                  - component: Label
+                                    config:
+                                      text: last update
+                                      style:
+                                        margin-top: 10px
+                          footer:
+                            - component: f7-row
+                              slots:
+                                default:
+                                  - component: Label
+                                    config:
+                                      text: =items.mbc_lastConnectionDateTime.displayState
+                                      style:
+                                        margin-top: 8px

@@ -3,5 +3,11 @@ when
     Time cron "0 */10 * ? * *" // every 10min
 then
     logInfo("mb-connect", "Calling mb-connect.py --data")
-    executeCommandLine(Duration.ofSeconds(45),"/usr/bin/python3", "/etc/openhab/scripts/mb-connect/mb-connect.py", "--data")
+
+    // Remove the comments on your openHAB version exec command
+    // openHab3
+    // executeCommandLine(Duration.ofSeconds(45),"/usr/bin/python3", "/etc/openhab/scripts/mb-connect/mb-connect.py", "--data")
+
+    // openHAB2
+    // executeCommandLine("/usr/bin/python3 /etc/openhab2/scripts/mb-connect/mb-connect.py --data", 45000)
 end

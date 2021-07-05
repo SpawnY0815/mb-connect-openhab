@@ -8,6 +8,8 @@ String                  mbc_client_id                         "Client ID [%s]"  
 String                  mbc_client_secret                     "Client Secret [%s]"                                                    (gMBC)
 String                  mbc_vehicle_id                        "VIN [%s]"                                                              (gMBC)
 String                  mbc_api_key                           "API Key [%s]"                                                          (gMBC)
+String                  mbc_redirect_url                      "redirect url [%s]"                                                     (gMBC)
+
 
 // Strings for Token Auth
 String                  mbc_access_token                      "AccessToken [%s]"                                                      (gMBC)
@@ -23,6 +25,14 @@ Switch                  mbc_scope_evstatus                    "Electric Vehicle 
 Switch                  mbc_scope_vehiclelock                 "Vehicle Lock Status API"                                               (gMBC)
 Switch                  mbc_scope_vehiclestatus               "Vehicle Status API"                                                    (gMBC)
 Switch                  mbc_scope_payasyoudrive               "Pay As You Drive Insurance API"                                        (gMBC)
+
+// Vehicle Images options
+
+Switch                  mbc_data_imageoption_night            "Enable image NIGHT option"                                             (gMBC)
+Switch                  mbc_data_imageoption_roofOpen         "Enable image ROOF OPEN option"                                         (gMBC)
+Switch                  mbc_data_imageoption_background       "Enable image BACKGROUND option"                                        (gMBC)
+Switch                  mbc_data_imageoption_cropped          "Enable image CROPPED option"                                           (gMBC)
+Switch                  mbc_data_imageoption_jpeg             "Enable image JPEG option"                                              (gMBC)
 
 // ######## DATA ##########
 // Fuel Status

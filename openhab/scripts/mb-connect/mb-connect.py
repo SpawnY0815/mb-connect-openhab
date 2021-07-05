@@ -1,7 +1,8 @@
 #
-# Use the Mercedes Benz Connect API to feed your openHAB smarthome system whit vehicle data | by spawny0815
+# Use the Mercedes Benz Connect API to feed your openHAB smarthome system with vehicle data | by spawny0815 / Christopher Pattison
 # openHAB Community Forum: https://community.openhab.org/t/mercedes-connected-car-api/39673
 # GitHub Repository: https://github.com/SpawnY0815/mb-connect-openhab
+# Version 1.1
 #
 
 import requests
@@ -13,12 +14,17 @@ from openhab import OpenHAB  # https://github.com/sim0nx/python-openhab
 
 ## Local settings
 
-# EXAMPLE: "http://openhabian:8080/static/mb-connect/mb-connect_auth.html" or "http://192.168.10.50:8080/static/mb-connect/mb-connect_auth.html" Must be the same as in the Mercedes-Benz APP!
-REDIRECT_URL = 'http://XXX.XXX.XXX.XXX:8080/static/mb-connect/mb-connect_auth.html'
+# REDIRECT URL EXAMPLE: "http://openhabian:8080/static/mb-connect/mb-connect_auth.html" or "http://192.168.10.50:8080/static/mb-connect/mb-connect_auth.html" Must be the same as in the Mercedes-Benz APP!
+REDIRECT_URL = 'http://192.168.150.10:8080/static/mb-connect/mb-connect_auth.html'
 
-# OPTIONAL: you can adjust the item name prefix to your structure
+# OPTIONAL: you can adjust the item name prefix to your structure, DO THE SAME ON THE TOP OF THE "mb-connect_auth.html" AND IN YOUR ITEMS FILE!!!! Default: 'mbc_'
 ITEM_PREFIX = 'mbc_'
-
+# OPTIONAL: you can set here the relative path where the images will be stored. Default: '../../html/mb-connect/vehicle_images/'
+IMAGEPATH = '../../html/mb-connect/vehicle_images/'
+# OPTIONAL: you can set a image file prefix to better identifie you images. e.g. = 'Eclass_'
+IMAGNAME_PREFIX = ''
+# OPTIONAL: If you have problems and need more error texts you can set this variable to "True". Default is "False"
+DEBUG = False
 
 #####################################################################################################################
 # Do not change anything below this line
@@ -28,6 +34,7 @@ ITEM_PREFIX = 'mbc_'
 API_AUTH_URL = 'https://id.mercedes-benz.com/as/authorization.oauth2'
 API_TOKEN_URL = 'https://id.mercedes-benz.com/as/token.oauth2'
 API_DATA_URL = 'https://api.mercedes-benz.com/vehicledata/v2/vehicles/'
+API_IMAGE_URL = 'https://api.mercedes-benz.com/vehicle_images/v1/'
 
 
 class MercedesBenzAPI(object):
@@ -41,8 +48,6 @@ class MercedesBenzAPI(object):
         """
         Check all requirements, get item states from openHAB and initialize the api connection.
         """
-
-        self.debug = False
         self.oh = OpenHAB(REDIRECT_URL.split('/static/')[0] + '/rest')
 
         self.client_id = self.oh.get_item(ITEM_PREFIX + 'client_id').state
@@ -59,11 +64,17 @@ class MercedesBenzAPI(object):
         self.token_issued = self.oh.get_item(ITEM_PREFIX + 'token_issued').state
         self.token_expiry = self.oh.get_item(ITEM_PREFIX + 'token_expiry').state
 
-        self.scope_fuelstatus = self.oh.get_item('mbc_scope_fuelstatus').state
-        self.scope_evstatus = self.oh.get_item('mbc_scope_evstatus').state
-        self.scope_vehiclelock = self.oh.get_item('mbc_scope_vehiclelock').state
-        self.scope_vehiclestatus = self.oh.get_item('mbc_scope_vehiclestatus').state
-        self.scope_payasyoudrive = self.oh.get_item('mbc_scope_payasyoudrive').state
+        self.scope_fuelstatus = self.oh.get_item(ITEM_PREFIX + 'scope_fuelstatus').state
+        self.scope_evstatus = self.oh.get_item(ITEM_PREFIX + 'scope_evstatus').state
+        self.scope_vehiclelock = self.oh.get_item(ITEM_PREFIX + 'scope_vehiclelock').state
+        self.scope_vehiclestatus = self.oh.get_item(ITEM_PREFIX + 'scope_vehiclestatus').state
+        self.scope_payasyoudrive = self.oh.get_item(ITEM_PREFIX + 'scope_payasyoudrive').state
+
+        self.imageoption_night = self.oh.get_item(ITEM_PREFIX + 'data_imageoption_night').state
+        self.imageoption_roofOpen = self.oh.get_item(ITEM_PREFIX + 'data_imageoption_roofOpen').state
+        self.imageoption_background = self.oh.get_item(ITEM_PREFIX + 'data_imageoption_background').state
+        self.imageoption_cropped = self.oh.get_item(ITEM_PREFIX + 'data_imageoption_cropped').state
+        self.imageoption_jpeg = self.oh.get_item(ITEM_PREFIX + 'data_imageoption_jpeg').state
 
         if self.auth_code is None:
             print('# No authorization code found. Visit "' + REDIRECT_URL + '" to get authorization code.')
@@ -102,7 +113,7 @@ class MercedesBenzAPI(object):
 
             try:
                 r = requests.post(API_TOKEN_URL, headers=headers, params=payload)
-                if (self.debug):
+                if (DEBUG):
                     print(r.json())
             except:
                 print("# Token request failed")
@@ -149,7 +160,7 @@ class MercedesBenzAPI(object):
             r = requests.post(API_TOKEN_URL, headers=headers, params=payload)
             resp = r.json()
 
-            if (self.debug):
+            if (DEBUG):
                 print(resp)
 
             if(r.status_code == 200):
@@ -220,9 +231,9 @@ class MercedesBenzAPI(object):
 
         r = requests.get(url, headers=headers)
         if(r.status_code < 200 and r.status_code > 299):
-            if (self.debug):
+            if (DEBUG):
                 print('# Response Code = ' + str(r.status_code))
-            if (self.debug):
+            if (DEBUG):
                 print(r.content)
             print('# Error: ' + r.content)
             sys.exit()
@@ -281,7 +292,7 @@ class MercedesBenzAPI(object):
             [dict]: requested entpoint whit name, value, timestamp
         """
 
-        if (self.debug):
+        if (DEBUG):
             print('# try Call Endpoint')
 
         url = API_DATA_URL + endpoint[10:]
@@ -290,24 +301,125 @@ class MercedesBenzAPI(object):
         r = requests.get(url, headers=headers)
         if(r.status_code < 200 and r.status_code > 204):
             print('# Response Code = ' + str(r.status_code))
-            if (self.debug):
+            if (DEBUG):
                 print(r.content)
-            if (self.debug):
+            if (DEBUG):
                 print('# Error')
             return str(r.reason)
         if r.status_code == 200:
-            if (self.debug):
+            if (DEBUG):
                 print(r.json())
             self._transform_data(r.json())
             return r.json()
         if r.status_code == 204:
             print('# No data available for "' + endpoint.split('/')[-1] + '".')
         else:
-            if (self.debug):
+            if (DEBUG):
                 print(r)
-            if (self.debug):
+            if (DEBUG):
                 print('# Error')
             return str(r.reason)
+    
+    def get_images(self):
+        """
+        Retrieve the available resources of the image api.
+        """
+        print('# Mercedes Benz API connection successfully established!')
+
+        def confirm_prompt(question: str) -> bool:
+            reply = None
+            while reply not in ("y", "n"):
+                reply = input(f"{question} (y/n): ").lower()
+            if reply.lower() == 'n':
+                print('# Cancel image download!')
+                sys.exit()
+            if reply.lower() == 'y':
+                return
+
+        reply = confirm_prompt("# There is a call limit of 5 for the vehicle image trail. Confirm?")
+
+        if self.api_key is None:
+            print('# No API KEY found. Please fill the openHAB item "' + ITEM_PREFIX + 'api_key" with data.')
+            sys.exit()
+
+        print('# Searching image resources')
+
+        url = API_IMAGE_URL + 'vehicles/' + self.vehicle_id + '?roofOpen=' + str(self._helper_oh_switch_state(self.imageoption_roofOpen)).lower() + '&night=' + str(self._helper_oh_switch_state(self.imageoption_night)).lower() + '&background=' + str(self._helper_oh_switch_state(self.imageoption_background)).lower() + '&cropped=' + str(self._helper_oh_switch_state(self.imageoption_cropped)).lower() + '&jpeg=' + str(self._helper_oh_switch_state(self.imageoption_jpeg)).lower() + '&apikey=' + self.api_key
+        headers = {'accept': 'application/json;charset=utf-8'}
+
+        r = requests.get(url, headers=headers)
+
+        if(r.status_code < 200 and r.status_code > 299):
+            if (DEBUG):
+                print('# Response Code = ' + str(r.status_code))
+            if (DEBUG):
+                print(r.content)
+            print('# Error: ' + r.content)
+            sys.exit()
+        if r.status_code == 200:
+            img_counter = 0
+            print('Found ' + str(len(r.json())) + ' image IDs')
+            print('Start downloading')
+            for key, value in r.json().items():
+                self._download_images(key,value)
+                img_counter += 1
+                print('# Image ' + key + ' (' + str(img_counter) + ' of ' + str(len(r.json())) + ') downloaded successfully')
+            
+            print('the default location of your vehicle images are: "openHAB conf directory"/html/mb-connect/vehicle_images/')
+
+        else:
+            print('# Response Error')
+            print('# Response Code = ' + str(r.status_code))
+            print('# Response Text = ' + str(r.text))
+            sys.exit()
+    
+    def _download_images(self, imageName, imageId):
+        """
+        Download the received images.
+        """
+        url = API_IMAGE_URL + 'images/' + imageId + '?apikey=' + self.api_key
+        headers = {'accept': 'image/png'}
+
+        r = requests.get(url, headers=headers)
+
+
+        if(r.status_code < 200 and r.status_code > 299):
+            if (DEBUG):
+                print('# Response Code = ' + str(r.status_code))
+            if (DEBUG):
+                print(r.text)
+            print('# Error: ' + r.text)
+            sys.exit()
+        if r.status_code == 200:
+
+            if self._helper_oh_switch_state(self.imageoption_roofOpen): 
+                img_option_roof = '_roofOpen' 
+            else: 
+                img_option_roof = ''
+            if self._helper_oh_switch_state(self.imageoption_night): 
+                img_option_night = '_night' 
+            else: 
+                img_option_night = ''
+            if self._helper_oh_switch_state(self.imageoption_background): 
+                img_option_background = '_background' 
+            else: 
+                img_option_background = ''
+            if self._helper_oh_switch_state(self.imageoption_cropped): 
+                img_option_cropped = '_cropped' 
+            else: 
+                img_option_cropped = ''
+            if self._helper_oh_switch_state(self.imageoption_jpeg): 
+                img_option_fileFormat = '.jpeg' 
+            else: 
+                img_option_fileFormat = '.png'
+            with open(IMAGEPATH + IMAGNAME_PREFIX + imageName + img_option_roof + img_option_night + img_option_background + img_option_cropped + img_option_fileFormat, 'wb') as f:
+                f.write(r.content)
+            
+        else:
+            print('# Response Error')
+            print('# Response Code = ' + str(r.status_code))
+            print('# Response Text = ' + str(r.text))
+            sys.exit()
 
 
     def _done(self):
@@ -323,6 +435,7 @@ def main():
 
         print('# Available commands:')
         print('# --data: Get the available vehicle information as configured with the openHAB items.')
+        print('# --get_images: Download the vehicle images according to the openHAB item settings')
 
     print('-------------------------------------------------------------------')
     print('## Starting Mercedes Benz API connection ##')
@@ -340,6 +453,9 @@ def main():
             api.call()
         elif args[1] == '--help':
             help_cmd()
+        elif args[1] == '--get_images':
+            api = MercedesBenzAPI()
+            api.get_images()
         else:
             print('#- Wrong argument')
             help_cmd()

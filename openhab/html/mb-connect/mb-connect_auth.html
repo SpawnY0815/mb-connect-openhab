@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- by Spawny0815 / Christopher Pattison
+     https://github.com/SpawnY0815/mb-connect-openhab
+-->
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>Mercedes Benz connect openHAB integration</title>
-	<!-- CSS only -->
+	<title>Mercedes-Benz to openHAB integration v1.1</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 
@@ -17,316 +19,188 @@
 			color: #3d454d;
 			font-weight: 500;
 		}
+
+		.widget {
+			width: 100% !important;
+		}
 	</style>
-
-
 </head>
-<script>
-
-	$(document).ready(function () {
-
-		var getUrl = window.location;
-		var baseUrl = getUrl.pathname.split('.html')[0] + '.html';
-
-		var client_id_str
-
-		function gen_state(length) {
-			var result = '';
-			var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
-			var charactersLength = characters.length;
-			for (var i = 0; i < length; i++) {
-				result += characters.charAt(Math.floor(Math.random() * charactersLength));
-			}
-			return result;
-		}
-
-		const state = gen_state(64)
-
-		function getParameterByName(name, url) {
-			if (!url) url = window.location.href;
-			name = name.replace(/[\[\]]/g, "\\$&");
-			var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-				results = regex.exec(url);
-			if (!results) return null;
-			if (!results[2]) return '';
-			return decodeURIComponent(results[2].replace(/\+/g, " "));
-		}
-
-		$.get("/rest/items/mbc_client_id/state", function (data) {
-			var d = document.getElementById("item_client_id");
-			client_id = data
-			if (data.length > 30) {
-				$("#item_client_id").html('set');
-				d.className += " table-success";
-			} else {
-				$("#item_client_id").html('not set');
-				d.className += " table-danger";
-			}
-		});
-		$.get("/rest/items/mbc_client_secret/state", function (data) {
-			var d = document.getElementById("item_client_secret");
-			client_secret = data
-			if (data.length > 30) {
-				$("#item_client_secret").html('set');
-				d.className += " table-success";
-			} else {
-				$("#item_client_secret").html('not set');
-				d.className += " table-danger";
-			}
-		});
-		$.get("/rest/items/mbc_vehicle_id/state", function (data) {
-			var d = document.getElementById("item_vehicle_id");
-			vehicle_id = data
-			if (data.length > 15) {
-				$("#item_vehicle_id").html('set');
-				d.className += " table-success";
-			} else {
-				$("#item_vehicle_id").html('not set');
-				d.className += " table-danger";
-			}
-		});
-		$.get("/rest/items/mbc_api_key/state", function (data) {
-			var d = document.getElementById("item_api_key");
-			if (data.length > 30) {
-				$("#item_api_key").html('set');
-				d.className += " table-success";
-			} else {
-				$("#item_api_key").html('not set');
-				d.className += " table-danger";
-			}
-		});
-
-
-
-		$.get("/rest/items/mbc_scope_fuelstatus/state", function (data) {
-			var d = document.getElementById("scope_fuelstatus");
-			if (data === "ON") {
-				fuelstatus = "mb:vehicle:mbdata:fuelstatus ";
-				$("#scope_fuelstatus").html('active');
-				d.className += " table-success";
-			} else {
-				fuelstatus = "";
-				$("#scope_fuelstatus").html('not active');
-				d.className += " table-danger";
-			}
-		});
-		$.get("/rest/items/mbc_scope_evstatus/state", function (data) {
-			var d = document.getElementById("scope_evstatus");
-			if (data === "ON") {
-				evstatus = "mb:vehicle:mbdata:evstatus ";
-				$("#scope_evstatus").html('active');
-				d.className += " table-success";
-			} else {
-				evstatus = "";
-				$("#scope_evstatus").html('not active');
-				d.className += " table-danger";
-			}
-		});
-		$.get("/rest/items/mbc_scope_vehiclelock/state", function (data) {
-			var d = document.getElementById("scope_vehiclelock");
-			if (data === "ON") {
-				vehiclelock = "mb:vehicle:mbdata:vehiclelock ";
-				$("#scope_vehiclelock").html('active');
-				d.className += " table-success";
-			} else {
-				vehiclelock = "";
-				$("#scope_vehiclelock").html('not active');
-				d.className += " table-danger";
-			}
-		});
-		$.get("/rest/items/mbc_scope_vehiclestatus/state", function (data) {
-			var d = document.getElementById("scope_vehiclestatus");
-			if (data === "ON") {
-				vehiclestatus = "mb:vehicle:mbdata:vehiclestatus ";
-				$("#scope_vehiclestatus").html('active');
-				d.className += " table-success";
-			} else {
-				vehiclestatus = "";
-				$("#scope_vehiclestatus").html('not active');
-				d.className += " table-danger";
-			}
-		});
-		$.get("/rest/items/mbc_scope_payasyoudrive/state", function (data) {
-			var d = document.getElementById("scope_payasyoudrive");
-			if (data === "ON") {
-				payasyoudrive = "mb:vehicle:mbdata:payasyoudrive ";
-				$("#scope_payasyoudrive").html('active');
-				d.className += " table-success";
-			} else {
-				payasyoudrive = "";
-				$("#scope_payasyoudrive").html('not active');
-				d.className += " table-danger";
-			}
-		}).done(function () {
-
-			var code = getParameterByName('code', document.location.href);
-			// window.alert(client_id_str);
-
-			var d = document.getElementById("auth_button");
-			setTimeout(() => {
-				if (client_id != "NULL" && client_secret != "NULL" && vehicle_id != "NULL") {
-					if (code === null) {
-						$("#client_id").html(client_id);
-						d.className += "btn btn-dark";
-						url = 'https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&client_id=' + client_id + '&redirect_uri=' + encodeURI(document.location.href) + '&scope=' + fuelstatus + evstatus + vehiclelock + vehiclestatus + payasyoudrive + "offline_access&state=" + state;
-						$("#link").attr('href', url);
-						d.textContent = "Authenticate";
-						$("#auth_area").html('');
-
-						$.ajax({
-							url: '/rest/items/mbc_auth_state/state',
-							method: 'PUT',
-							contentType: 'text/plain',
-							data: state
-						});
-
-					}
-				} else {
-					$("#status").html('Prerequisites missing!');
-					d.className += " btn-danger";
-					$("#link").attr('href', baseUrl);
-					d.textContent = "Reload";
-					$("#auth_area").html('');
-				}
-			}, 1000);
-
-			if (code !== null) {
-
-				if (code.length > 10) {
-
-					$.get("/rest/items/mbc_auth_state/state", function (data) {
-						var r_state = getParameterByName('state', document.location.href);
-						if (r_state == data) {
-							var s = document.getElementById("auth_button");
-							s.className = "btn btn-success";
-							s.textContent = "Success!";
-							$("#link").attr("href", baseUrl);
-							$("#auth_code").html(code);
-							$.ajax({
-								url: '/rest/items/mbc_auth_code/state',
-								method: 'PUT',
-								contentType: 'text/plain',
-								data: code,
-								statusCode: {
-									202: function () {
-										$("#status").html('New Mercedes Benz API Auth Code successfully saved to openHAB!');
-									}
-								}
-							});
-							$.ajax({
-								url: '/rest/items/mbc_auth_code_trigger/state',
-								method: 'PUT',
-								contentType: 'text/plain',
-								data: 'ON',
-							});
-
-						} else {
-							var d = document.getElementById("auth_button");
-							$("#status").html('Wrong state! CSRF attack?');
-							d.className += " btn-danger";
-							$("#link").attr('href', baseUrl);
-							d.textContent = "ERROR";
-							$("#auth_area").html('');
-						}
-					});
-
-				}
-			} else {
-				var error_description = getParameterByName('error_description', document.location.href);
-				var e = document.getElementById("error_description");
-				e.className += "text-danger";
-				var d = document.getElementById("auth_button");
-				$("#status").html(error_description);
-				d.className += " btn-danger";
-				$("#link").attr('href', baseUrl);
-				d.textContent = "ERROR";
-				$("#auth_area").html('');
-			}
-
-
-
-		});
-	});
-
-
-</script>
-<style>
-	.widget {
-		width: 100% !important;
-	}
-</style>
 
 <body>
-	<div class="container w-25 p-3 pb-1">
-		<div class="container bg-light border border-info rounded-bottom overflow-hidden p-3">
-			<h3 class="text-center">Mercedes-Benz API Auth</h3>
+
+	<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" style="display:none">
+		<symbol id="icon-pencil">
+			<path
+				d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z">
+			</path>
+		</symbol>
+	</svg>
+
+	<div class="container p-2">
+		<div class="container bg-light border border-info rounded-bottom overflow-hidden p-2">
+			<h3 class="text-center">Mercedes-Benz API Auth v1.1</h3>
 			<div class="border p-3">
 				<table class="table table-striped">
 					<thead class="thead-dark">
 						<tr>
-							<th scope="row">OH Items</th>
-							<th class="text-center" scope="col">Status</th>
+							<th scope="row">openHAB auth items</th>
+							<th class="text-center" scope="col">Value</th>
+							<th class="text-center" scope="col">Edit</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
 							<th scope="row">Client ID</th>
-							<td class="text-center" id="item_client_id">not set</td>
+							<td class="text-center" id="item_client_id">not found</td>
+							<td class="text-center">
+								<button id="c-switch-auth-client_id" type="button" class="btn btn-sm">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+										class="bi bi-pencil" viewBox="0 0 16 16">
+										<use xlink:href="#icon-pencil"></use>
+									</svg>
+								</button>
+							</td>
+						</tr>
+						<tr id="send_client_id">
 						</tr>
 						<tr>
 							<th scope="row">Client Secret</th>
-							<td class="text-center" id="item_client_secret">not set</td>
+							<td class="text-center" id="item_client_secret">not found</td>
+							<td class="text-center">
+								<button id="c-switch-auth-client_secret" type="button" class="btn btn-sm">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+										class="bi bi-pencil" viewBox="0 0 16 16">
+										<use xlink:href="#icon-pencil"></use>
+									</svg>
+								</button>
+							</td>
 						</tr>
+						<tr id="send_client_secret"></tr>
 						<tr>
 							<th scope="row">Vehicle ID (VIN)</th>
-							<td class="text-center" id="item_vehicle_id">not set</td>
+							<td class="text-center" id="item_vehicle_id">not found</td>
+							<td class="text-center">
+								<button id="c-switch-auth-vehicle_id" type="button" class="btn btn-sm">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+										class="bi bi-pencil" viewBox="0 0 16 16">
+										<use xlink:href="#icon-pencil"></use>
+									</svg>
+								</button>
+							</td>
 						</tr>
-						<tr>
-							<th scope="row">API Key (optional)</th>
-							<td class="text-center" id="item_api_key">not set</td>
-						</tr>
+						<tr id="send_vehicle_id"></tr>
 					</tbody>
 				</table>
-				<p>API Key is optional (for example: vehicle images).</p>
 			</div>
 			<div class="border p-3">
 				<table class="table table-striped">
 					<thead class="thead-dark">
 						<tr>
 							<th scope="row">API products</th>
-							<th class="text-center" scope="col">Status</th>
+							<th class="text-center" scope="col">Value</th>
+							<th class="text-center" scope="col">Set</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
 							<th scope="row">Fuel Status</th>
-							<td class="text-center" id="scope_fuelstatus">not activated</td>
+							<td class="text-center" id="scope_fuelstatus">not found</td>
+							<td class="text-center" id="c-switch-scope-fuelstatus"></td>
 						</tr>
 						<tr>
 							<th scope="row">Electric Vehicle Status</th>
-							<td class="text-center" id="scope_evstatus">not activated</td>
+							<td class="text-center" id="scope_evstatus">not found</td>
+							<td class="text-center" id="c-switch-scope-evstatus"></td>
 						</tr>
 						<tr>
 							<th scope="row">Vehicle Lock Status</th>
-							<td class="text-center" id="scope_vehiclelock">not activated</td>
+							<td class="text-center" id="scope_vehiclelock">not found</td>
+							<td class="text-center" id="c-switch-scope-vehiclelock"></td>
 						</tr>
 						<tr>
 							<th scope="row">Vehicle Status</th>
-							<td class="text-center" id="scope_vehiclestatus">not activated</td>
+							<td class="text-center" id="scope_vehiclestatus">not found</td>
+							<td id="c-switch-scope-vehiclestatus"></td>
 						</tr>
 						<tr>
 							<th scope="row">Pay As You Drive Insurance</th>
-							<td class="text-center" id="scope_payasyoudrive">not activated</td>
+							<td class="text-center" id="scope_payasyoudrive">not found</td>
+							<td class="text-center" id="c-switch-scope-payasyoudrive"></td>
 						</tr>
-
 					</tbody>
 				</table>
+				<p>Check the API products available for your vehicle and registered in the Mercedes-Benz dev project.
+				</p>
 			</div>
-			<p>Check the API products available for your vehicle and registered in the Mercedes-Benz dev app. You can
-				change the settings via the openHAB scope items like (mbc_scope_fuelstatus).</p>
+			<div class="border p-3">
+				<table class="table table-striped">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="row">Image settings (optional)</th>
+							<th class="text-center" scope="col">Status</th>
+							<th class="text-center" scope="col">Set</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="row">API Key</th>
+							<td class="text-center" id="item_api_key">not found</td>
+							<td class="text-center">
+								<button id="c-switch-auth-api_key" type="button" class="btn btn-sm">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+										class="bi bi-pencil" viewBox="0 0 16 16">
+										<use xlink:href="#icon-pencil"></use>
+									</svg>
+								</button>
+							</td>
+						</tr>
+						<tr id="send_api_key"></tr>
+						<tr>
+							<th scope="row">NIGHT</th>
+							<td class="text-center" id="item_imageoption_night">not found</td>
+							<td class="text-center" id="c-switch-img-night"></td>
+						</tr>
+						<tr>
+							<th scope="row">ROOF OPEN</th>
+							<td class="text-center" id="item_imageoption_roofOpen">not found</td>
+							<td class="text-center" id="c-switch-img-roofOpen"></td>
+						</tr>
+						<tr>
+							<th scope="row">BACKGROUND</th>
+							<td class="text-center" id="item_imageoption_background">not found</td>
+							<td class="text-center" id="c-switch-img-background"></td>
+						</tr>
+						<tr>
+							<th scope="row">CROPPED</th>
+							<td class="text-center" id="item_imageoption_cropped">not found</td>
+							<td class="text-center" id="c-switch-img-cropped"></td>
+						</tr>
+						<tr>
+							<th scope="row">JPEG (default: png)</th>
+							<td class="text-center" id="item_imageoption_jpeg">not found</td>
+							<td class="text-center" id="c-switch-img-jpeg"></td>
+						</tr>
+					</tbody>
+				</table>
+				<p>To get images run the scipt once with the "--get_image" argument in console.</p>
+			</div>
 			<div class="border p-3">
 				<div class="row gy-5 align-items-center">
 					<div class="col-6">
+						<button class="btn btn-primary" type="button" id="copybtn" data-toggle="tooltip"
+							title="copied to clipboard!">
+							Copy redirect url
+						</button>
+					</div>
+					<div class="col-6">
+						<p id="redirecturl"></p>
+					</div>
+				</div>
+			</div>
+			<div class="border p-3">
+				<div class="row gy-5 align-items-center">
+					<div class="col-6">
+						<div id="reload"></div>
 						<div class="name">
 							<h4>Status</h4>
 						</div>
@@ -345,11 +219,35 @@
 				<p id="auth_code" class="text-center">not yet received</p>
 			</div>
 			<div id="error_description"></div>
+			<div class="container p-3">
+				<div class="row text-center">
+					<div class="col">
+						<a href="https://github.com/SpawnY0815/mb-connect-openhab" class="link-info">GitHub</a>
+					</div>
+					<div class="col text-center">
+						<a href="https://community.openhab.org/t/mercedes-benz-integration/117795"
+							class="link-info">openHAB Community</a>
+					</div>
+					<div class="col text-center">
+						<a href="https://openhab.org" class="link-info">openHAB</a>
+					</div>
+
+				</div>
+				<div class="row p-2 text-end">
+					<div class="col">
+						<p><small></small></p>
+						<figcaption class="blockquote-footer lh-lg"><cite title="Source Title">by Spawny0815 |
+								Christopher Pattison</cite>
+						</figcaption>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
 		crossorigin="anonymous"></script>
+	<script src="mb-connect.min.js"></script>
 </body>
 
 </html>

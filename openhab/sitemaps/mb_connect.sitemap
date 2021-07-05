@@ -85,4 +85,12 @@ sitemap mb_connect label="MB-Connect"
         Default item=mbc_data_rangeelectric_ts         
         Default item=mbc_data_odo_ts                   
     }
+    Frame label="Images settings" {
+        Default item=mbc_data_image_enable          
+        Default item=mbc_data_imageoption_night     
+        Default item=mbc_data_imageoption_roofOpen  
+        Default item=mbc_data_imageoption_background
+        Default item=mbc_data_imageoption_cropped   
+        Default item=mbc_data_imageoption_jpeg      
+    }
 }
